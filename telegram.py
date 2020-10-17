@@ -1,7 +1,7 @@
 import requests
 from typing import Tuple
 
-TOKEN = "1115297640:AAHZnJzcHVCgrgyVUSsYRqJQSmQJDNXcYz8"
+TOKEN = ""
 URL = "https://api.telegram.org/bot{token}/{method}"
 _offset = 0
 
