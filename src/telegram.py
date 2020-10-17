@@ -1,9 +1,11 @@
 import requests
 from typing import Tuple
+import os
 
-TOKEN = "1360917608:AAGB4YtRDmIi7ywCMFb6IILGswf0wHCx-r0"
+TOKEN = os.environ["BOT_TOKEN"]
 URL = "https://api.telegram.org/bot{token}/{method}"
 _offset = 0
+
 
 class TelegramError(Exception):
     pass
