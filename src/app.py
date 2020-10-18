@@ -21,7 +21,7 @@ def get_message_parser(chat_id: int,  text: str) -> Callable[[],str]:
         return _stored_chats.pop(chat_id)
     else:
         return lambda s: "No handler for your request"  
-      
+
 
 def main():
     while True:
@@ -36,4 +36,4 @@ def main():
             continue
 
 if __name__ == "__main__":
-    main()
+    main() 
