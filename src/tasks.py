@@ -1,6 +1,8 @@
 from typing import Tuple
 import random
 
+k_list = [n for n in range(-10, 11) if n != 0]
+
 def get_task() -> Tuple[str, str]:
     functions = (get_linear, get_quadratic)
     return random.choice(functions)()
@@ -8,7 +10,7 @@ def get_task() -> Tuple[str, str]:
 def get_linear() -> Tuple[str, str]:
     x = random.randint(-50,50)   
     a = random.randint(0,100)
-    k = random.randint(-10,10)
+    k = random.choice(k_list)
     b = (a+(k*x))
     sign = "+" if k >= 0 else ""
     equation = f"{str(a)+f'{sign}' if a != 0 else ''}{k if k != 1 else ''}x={b}"
