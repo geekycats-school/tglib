@@ -5,8 +5,13 @@ import json
 from typing import Any, List, Callable
 
 _stored_chats = dict()  # chat_id answer
+commands = [{"command": "new_task", "description": "Generates a new task."}]
 
 
+def init():
+    telegram.set_commands(commands)
+
+    
 def save():
     savefile = open("stored_chats.json", "w")
     json.dump(_stored_chats, savefile)
@@ -14,6 +19,7 @@ def save():
     logging.info("Saved")
     exit()
 
+    
 def check_answer(chat_id: int, text: str) -> str:
     if _stored_chats[chat_id] == text:
         del _stored_chats[chat_id]
