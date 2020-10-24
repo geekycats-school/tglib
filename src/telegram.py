@@ -11,7 +11,9 @@ class TelegramError(Exception):
 
 
 def set_commands(commands: list):
-    requests.post(URL.format(token=TOKEN, method="setMyCommands"), data=commands)
+    requests.post(
+        config.URL.format(token=config.TOKEN, method="setMyCommands"), data=commands
+    )
 
 
 def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
