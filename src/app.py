@@ -1,40 +1,51 @@
 import telegram
 import logging
 import tasks
-import config
+import json
 from typing import Any, List, Callable
 
-_stored_chats = dict() #chat_id function
+_stored_chats = dict()  # chat_id answer
 
-def get_command_parser(chat_id: int, command_name: str, *args: List[str]) -> Callable[[Any], str]:
-    # /command arg1 arg2  
-    if command_name == "/new_task":
-        task, answer = tasks.get_task()
-        _stored_chats[chat_id] = lambda s: config.TEXT_CORRECT_ANSWER if s.strip() == answer else config.TEXT_INCORRECT_ANSWER
-        return lambda *args: task 
+
+def save():
+    savefile = open("stored_chats.json", "w")
+    json.dump(_stored_chats, savefile)
+    savefile.close()
+    logging.info("Saved")
+    exit()
+
+def check_answer(chat_id: int, text: str) -> str:
+    if _stored_chats[chat_id] == text:
+        del _stored_chats[chat_id]
+        return "Correct"
     else:
-        raise telegram.TelegramError
+        return "Wrong"
 
-def get_message_parser(chat_id: int,  text: str) -> Callable[[],str]:
+
+def handler(chat_id, text):
     if text.lstrip().startswith("/"):
-        return get_command_parser(chat_id, *text.split())
+        if text == "/new_task":
+            task, answer = tasks.get_task()
+            _stored_chats[chat_id] = answer
+            return task
     elif chat_id in _stored_chats:
-        return _stored_chats.pop(chat_id)
-    else:
-        return lambda s: config.TEXT_NO_HANDLER
+        return check_answer(chat_id, text)
+    return config.TEXT_NO_HANDLER
 
 
 def main():
     while True:
         try:
             chat_id, message = telegram.get_message()
-            parser = telegram.get_message_parser(chat_id, message)
-            telegram.send_message(chat_id, parser(message))
+            output = handler(chat_id, message)
+            telegram.send_message(chat_id, output)
         except TimeoutError:
             continue
         except telegram.TelegramError as e:
             logging.error(f"Exception occured\n{e}")
             continue
+        except KeyboardInterrupt:
+            save()
 
 if __name__ == "__main__":
     main() 
