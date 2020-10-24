@@ -11,6 +11,10 @@ class TelegramError(Exception):
     pass
 
 
+def set_commands(commands: list):
+    requests.post(URL.format(token=TOKEN, method="setMyCommands"), data=commands)
+
+
 def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
     # -> chat_id, text
     global _offset
