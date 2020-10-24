@@ -1,9 +1,8 @@
 import requests
 from typing import Tuple
 import os
+import config
 
-TOKEN = os.environ["BOT_TOKEN"]
-URL = "https://api.telegram.org/bot{token}/{method}"
 _offset = 0
 
 
@@ -18,7 +17,9 @@ def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
         offset = _offset
     params = {"offset": offset, "timeout": 60, "limit": limit}
     resp = requests.get(
-        URL.format(token=TOKEN, method="getUpdates"), params=params, timeout=60
+        config.URL.format(token=config.TOKEN, method="getUpdates"),
+        params=params,
+        timeout=60,
     )
     if resp.ok and resp.json()["ok"] == True and len(resp.json()["result"]) == 1:
         result = resp.json()["result"][0]
@@ -34,4 +35,6 @@ def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
 
 def send_message(chat_id: int, text: str):
     data = {"chat_id": chat_id, "text": text}
-    requests.post(URL.format(token=TOKEN, method="sendMessage"), data=data)
+    requests.post(
+        config.URL.format(token=config.TOKEN, method="sendMessage"), data=data
+    )

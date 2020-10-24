@@ -1,6 +1,7 @@
 import telegram
 import logging
 import tasks
+import config
 from typing import Any, List, Callable
 
 _stored_chats = dict() #chat_id function
@@ -9,7 +10,7 @@ def get_command_parser(chat_id: int, command_name: str, *args: List[str]) -> Cal
     # /command arg1 arg2  
     if command_name == "/new_task":
         task, answer = tasks.get_task()
-        _stored_chats[chat_id] = lambda s: "Right!" if s.strip() == answer else "That isn't a right answer."
+        _stored_chats[chat_id] = lambda s: config.TEXT_CORRECT_ANSWER if s.strip() == answer else config.TEXT_INCORRECT_ANSWER
         return lambda *args: task 
     else:
         raise telegram.TelegramError
@@ -20,7 +21,7 @@ def get_message_parser(chat_id: int,  text: str) -> Callable[[],str]:
     elif chat_id in _stored_chats:
         return _stored_chats.pop(chat_id)
     else:
-        return lambda s: "No handler for your request"  
+        return lambda s: config.TEXT_NO_HANDLER
 
 
 def main():
