@@ -10,7 +10,8 @@ _stored_chats = dict()  # chat_id answer
 def save():
     savefile = open("stored_chats.json", "w")
     json.dump(_stored_chats, savefile)
-    print("Saved")
+    savefile.close()
+    logging.info("Saved")
     exit()
 
 def check_answer(chat_id: int, text: str) -> str:
