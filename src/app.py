@@ -30,7 +30,7 @@ def handler(chat_id, text):
             return task
     elif chat_id in _stored_chats:
         return check_answer(chat_id, text)
-    return "no handler for your request."
+    return config.TEXT_NO_HANDLER
 
 
 def main():
@@ -47,6 +47,5 @@ def main():
         except KeyboardInterrupt:
             save()
 
-
 if __name__ == "__main__":
-    main()
+    main() 
