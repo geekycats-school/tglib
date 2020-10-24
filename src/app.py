@@ -1,5 +1,6 @@
 import telegram
 import logging
+import config
 import tasks
 import json
 from typing import Any, List, Callable
@@ -23,9 +24,9 @@ def save():
 def check_answer(chat_id: int, text: str) -> str:
     if _stored_chats[chat_id] == text:
         del _stored_chats[chat_id]
-        return "Correct"
+        return config.TEXT_CORRECT_ANSWER
     else:
-        return "Wrong"
+        return config.TEXT_INCORRECT_ANSWER
 
 
 def handler(chat_id, text):
