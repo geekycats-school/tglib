@@ -34,7 +34,10 @@ def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
             message = result["message"]
         else:
             raise TelegramError(resp.text)
-        return message["chat"]["id"], message["text"]
+        try:
+            return message["chat"]["id"], message["text"]
+        except KeyError:
+            return message["chat"]["id"], "None"
     else:
         raise TelegramError(resp.text)
 
