@@ -22,24 +22,29 @@ def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
     if offset is None:
         offset = _offset
     params = {"offset": offset, "timeout": 60, "limit": limit}
-    resp = requests.get(
-        config.URL.format(token=config.TOKEN, method="getUpdates"),
-        params=params,
-        timeout=60,
-    )
-    if resp.ok and resp.json()["ok"] == True and len(resp.json()["result"]) == 1:
-        result = resp.json()["result"][0]
-        _offset = result["update_id"] + 1
-        if "message" in result:
-            message = result["message"]
+    while True:
+        resp = requests.get(
+            config.URL.format(token=config.TOKEN, method="getUpdates"),
+            params=params,
+            timeout=60,
+        )
+        if resp.ok and resp.json()["ok"] == True:
+            if len(resp.json()["result"]) == 1:
+                result = resp.json()["result"][0]
+                _offset = result["update_id"] + 1
+                if "message" in result:
+                    message = result["message"]
+                else:
+                    raise TelegramError(resp.text)
+                try:
+                    return message["chat"]["id"], message["text"]
+                except KeyError:
+                    return message["chat"]["id"], "None"
+            elif len(resp.json()["result"]) == 0:
+                continue
         else:
             raise TelegramError(resp.text)
-        try:
-            return message["chat"]["id"], message["text"]
-        except KeyError:
-            return message["chat"]["id"], "None"
-    else:
-        raise TelegramError(resp.text)
+        
 
 
 def send_message(chat_id: int, text: str):
