@@ -16,8 +16,8 @@ def set_commands(commands: list):
     )
 
 
-def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
-    # -> chat_id, text
+def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str, str]:
+    # -> chat_id, text, lang_code
     global _offset
     if offset is None:
         offset = _offset
@@ -35,9 +35,9 @@ def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
         else:
             raise TelegramError(resp.text)
         try:
-            return message["chat"]["id"], message["text"]
+            return message["chat"]["id"], message["text"], message["from"]["language_code"]
         except KeyError:
-            return message["chat"]["id"], "None"
+            return message["chat"]["id"], "None", message["from"]["language_code"]
     else:
         raise TelegramError(resp.text)
 

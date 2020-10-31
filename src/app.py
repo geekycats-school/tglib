@@ -6,11 +6,11 @@ import json
 from typing import Any, List, Callable
 
 _stored_chats = dict()  # chat_id answer
-commands = [{"command": "new_task", "description": "Generates a new task."}]
+cmd = {'commands': [{'command': 'new_task', 'description': 'Generates a new task'}]}
 
 
 def init():
-    telegram.set_commands(commands)
+    telegram.set_commands(cmd)
 
     
 def save():
@@ -21,12 +21,12 @@ def save():
     exit()
 
     
-def check_answer(chat_id: int, text: str) -> str:
+def check_answer(chat_id: int, text: str, lang: str) -> str:
     if _stored_chats[chat_id] == text:
         del _stored_chats[chat_id]
-        return config.TEXT_CORRECT_ANSWER
+        return config.TEXT_CORRECT_ANSWER[lang]
     else:
-        return config.TEXT_INCORRECT_ANSWER
+        return config.TEXT_INCORRECT_ANSWER[lang]
 
 
 def handler(chat_id, text):
@@ -41,6 +41,7 @@ def handler(chat_id, text):
 
 
 def main():
+    init()
     while True:
         try:
             chat_id, message = telegram.get_message()
