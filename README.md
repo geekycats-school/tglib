@@ -5,6 +5,6 @@
 ### Useful links
 [Telegram bot api](https://core.telegram.org/bots/api)
 
-[Pony orm](https://docs.ponyorm.org/toc.html)
+Программа для формирования http запросов [Hoppscotch](https://hoppscotch.io/)
 
 [Python doc](https://docs.python.org/3/)
