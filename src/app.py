@@ -5,22 +5,25 @@ import tasks
 import json
 from typing import Any, List, Callable
 
-_stored_chats = dict()  # chat_id answer
-commands = [{"command": "new_task", "description": "Generates a new task."}]
+_stored_chats = None  # chat_id answer
+cmd = {"commands": [{"command": "new_task", "description": "Generates a new task."}]}
 
 
-def init():
-    telegram.set_commands(commands)
-
-    
 def save():
-    savefile = open("stored_chats.json", "w")
-    json.dump(_stored_chats, savefile)
-    savefile.close()
+    with open("stored_chats.json", "w") as savefile:
+        json.dump(_stored_chats, savefile)
     logging.info("Saved")
     exit()
 
-    
+
+def init():
+    global _stored_chats
+    telegram.set_commands(cmd)
+    with open("stored_chats.json", "r") as savefile:
+        _stored_chats = json.load(savefile) or dict()
+    logging.info("Initialized")
+
+
 def check_answer(chat_id: int, text: str) -> str:
     if _stored_chats[chat_id] == text:
         del _stored_chats[chat_id]
@@ -41,6 +44,7 @@ def handler(chat_id, text):
 
 
 def main():
+    init()
     while True:
         try:
             chat_id, message = telegram.get_message()
@@ -54,5 +58,6 @@ def main():
         except KeyboardInterrupt:
             save()
 
+
 if __name__ == "__main__":
-    main() 
+    main()

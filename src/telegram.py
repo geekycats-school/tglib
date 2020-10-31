@@ -10,10 +10,11 @@ class TelegramError(Exception):
     pass
 
 
-def set_commands(commands: list):
-    requests.post(
-        config.URL.format(token=config.TOKEN, method="setMyCommands"), data=commands
+def set_commands(commands: dict):
+    resp = requests.post(
+        config.URL.format(token=config.TOKEN, method="setMyCommands"), json=commands
     )
+    print()
 
 
 def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
