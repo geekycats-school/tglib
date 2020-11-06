@@ -5,6 +5,7 @@ tasks:
       source ./env/bin/activate
       pip install --upgrade pip
       pip install -r requirements.txt
+      pip install -r requirements_dev.txt
   - command: >
       while [ -z "$BOT_TOKEN" ] ; do
         printf "\n❗ The BOT_TOKEN environment variable is required. Please enter its value.\n" &&
