@@ -10,7 +10,7 @@ cmd = {"commands": [{"command": "new_task", "description": "Generates a new task
 
 
 def save():
-    with open("stored_chats.json", "w") as savefile:
+    with open(config.DATA_FILE, "w") as savefile:
         json.dump(_stored_chats, savefile)
     logging.info("Saved")
 
@@ -18,7 +18,7 @@ def save():
 def init():
     global _stored_chats
     telegram.set_commands(cmd)
-    with open("stored_chats.json", "r") as savefile:
+    with open(config.DATA_FILE, "r") as savefile:
         _stored_chats = json.load(savefile) or dict()
     logging.info("Initialized")
 
