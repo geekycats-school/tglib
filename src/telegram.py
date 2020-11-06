@@ -10,9 +10,9 @@ class TelegramError(Exception):
     pass
 
 
-def set_commands(commands: list):
-    requests.post(
-        config.URL.format(token=config.TOKEN, method="setMyCommands"), data=commands
+def set_commands(commands: dict):
+    resp = requests.post(
+        config.URL.format(token=config.TOKEN, method="setMyCommands"), json=commands
     )
 
 
