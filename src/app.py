@@ -56,6 +56,7 @@ def main():
             continue
         except KeyboardInterrupt:
             save()
+            exit()
 
 
 if __name__ == "__main__":
