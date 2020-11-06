@@ -13,7 +13,6 @@ def save():
     with open("stored_chats.json", "w") as savefile:
         json.dump(_stored_chats, savefile)
     logging.info("Saved")
-    exit()
 
 
 def init():
