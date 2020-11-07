@@ -29,5 +29,5 @@ def get_quadratic() -> Tuple[str, str]:
     b_sign = "+" if b > 0 else ""
     c_sign = "+" if c > 0 else ""
 
-    equation = f"{a}x\u00B2{f'{b_sign}'+str(b)+'x' if b != 0 else ''}{f'{c_sign}'+str(c) if c != 0 else ''}=0"
+    equation = f"{a if a != 1 else ''}x\u00B2{f'{b_sign}'+str(b)+'x' if b != 0 else ''}{f'{c_sign}'+str(c) if c != 0 else ''}=0"
     return (equation, "{} {}".format(*sorted((x1, x2))))
