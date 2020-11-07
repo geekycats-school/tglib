@@ -36,10 +36,11 @@ def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
                     message = result["message"]
                 else:
                     raise TelegramError(resp.text)
+                id = str(message["chat"]["id"])
                 try:
-                    return message["chat"]["id"], message["text"]
+                    return id, message["text"]
                 except KeyError:
-                    return message["chat"]["id"], "None"
+                    return id, "None"
             elif len(resp.json()["result"]) == 0:
                 continue
         else:
@@ -47,7 +48,7 @@ def get_message(offset: int = None, limit: int = 1) -> Tuple[int, str]:
         
 
 
-def send_message(chat_id: int, text: str):
+def send_message(chat_id: str, text: str):
     data = {"chat_id": chat_id, "text": text}
     requests.post(
         config.URL.format(token=config.TOKEN, method="sendMessage"), data=data
