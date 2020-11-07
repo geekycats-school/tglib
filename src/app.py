@@ -3,6 +3,7 @@ import logging
 import config
 import tasks
 import json
+import os.path
 from typing import Any, List, Callable
 
 _stored_chats = None  # chat_id answer
@@ -18,8 +19,11 @@ def save():
 def init():
     global _stored_chats
     telegram.set_commands(cmd)
-    with open(config.DATA_FILE, "r") as savefile:
-        _stored_chats = json.load(savefile) or dict()
+    if os.path.isfile(config.DATA_FILE):
+        with open(config.DATA_FILE, "r") as savefile:
+            _stored_chats = json.load(savefile) or dict()
+    else:
+        _stored_chats = dict()
     logging.info("Initialized")
 
 
