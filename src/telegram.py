@@ -8,6 +8,11 @@ class Telegram:
     class TelegramError(Exception):
         pass
 
+    class Message:
+        def __init__(self, message: dict):
+            pass
+
+    
     def __init__(self, token: str, commands: dict, offset=0, limit=1):
         self._token = token
         self._offset = offset
@@ -19,7 +24,7 @@ class Telegram:
             raise TelegramError("Can't bind commands")
         
 
-    def get_message(self) -> Tuple[int, str]:
+    def get_message(self) -> Message:
         # -> chat_id, text
         params = {"offset": self._offset, "timeout": 60, "limit": self._limit}
         while True:
@@ -46,7 +51,6 @@ class Telegram:
             else:
                 raise TelegramError(resp.text)
             
-
 
     def send_message(self, chat_id: str, text: str):
         data = {"chat_id": chat_id, "text": text}
