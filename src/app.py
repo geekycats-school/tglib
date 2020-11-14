@@ -6,23 +6,25 @@ import json
 import os.path
 from typing import Any, List, Callable
 
-_stored_chats = None  # chat_id answer
 
 
-def save():
-    with open(config.DATA_FILE, "w") as savefile:
-        json.dump(_stored_chats, savefile)
-    logging.info("Saved")
+class Bot: 
+    def __init__(self, data_file):
+        self._data_file = data_file
+        if os.path.isfile(self._data_file):
+            with open(self._data_file, "r") as savefile:
+                self._stored_chats = json.load(savefile) or dict()
+        else:
+            self._stored_chats = dict()
+        logging.info("Initialized")
+    
+    def save(self):
+        with open(self._data_file, "w") as savefile:
+            json.dump(self._stored_chats, savefile)
+        logging.info("Saved")
 
 
-def init():
-    global _stored_chats
-    if os.path.isfile(config.DATA_FILE):
-        with open(config.DATA_FILE, "r") as savefile:
-            _stored_chats = json.load(savefile) or dict()
-    else:
-        _stored_chats = dict()
-    logging.info("Initialized")
+
 
 
 def check_answer(chat_id: int, text: str) -> str:
