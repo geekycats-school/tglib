@@ -1,4 +1,4 @@
-import telegram
+from telegram import Telegram
 import logging
 import config
 import tasks
@@ -7,7 +7,6 @@ import os.path
 from typing import Any, List, Callable
 
 _stored_chats = None  # chat_id answer
-cmd = {"commands": [{"command": "new_task", "description": "Generates a new task."}]}
 
 
 def save():
@@ -18,7 +17,6 @@ def save():
 
 def init():
     global _stored_chats
-    telegram.set_commands(cmd)
     if os.path.isfile(config.DATA_FILE):
         with open(config.DATA_FILE, "r") as savefile:
             _stored_chats = json.load(savefile) or dict()
@@ -48,6 +46,8 @@ def handler(chat_id, text):
 
 def main():
     init()
+    cmd = {"commands": [{"command": "new_task", "description": "Generates a new task."}]}
+    telegram = Telegram(config.TOKEN, cmd)
     while True:
         try:
             chat_id, message = telegram.get_message()
