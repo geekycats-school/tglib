@@ -16,7 +16,7 @@ def get_linear() -> Tuple[str, str]:
     k = random.choice(k_tpl)
     b = a + (k * x)
     sign = "+" if k >= 0 else ""
-    equation = f"{str(a)+f'{sign}' if a != 0 else ''}{k if abs(k) != 1 else ''}x={b}"
+    equation = f"{str(a)+sign if a != 0 else ''}{k if abs(k) != 1 else ''}x={b}"
     return (equation, str(x))
 
 
