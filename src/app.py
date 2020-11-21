@@ -7,8 +7,7 @@ import os.path
 from typing import Any, List, Callable
 
 
-
-class Bot: 
+class Bot:
     def __init__(self, data_file):
         self._data_file = data_file
         if os.path.isfile(self._data_file):
@@ -17,43 +16,38 @@ class Bot:
         else:
             self._stored_chats = dict()
         logging.info("Initialized")
-    
+
     def save(self):
         with open(self._data_file, "w") as savefile:
             json.dump(self._stored_chats, savefile)
         logging.info("Saved")
 
-
-
-
-
-def check_answer(chat_id: int, text: str) -> str:
-    if _stored_chats[chat_id] == text:
-        del _stored_chats[chat_id]
-        return config.TEXT_CORRECT_ANSWER
-    else:
-        return config.TEXT_INCORRECT_ANSWER
-
-
-def handler(chat_id, text):
-    if text.lstrip().startswith("/"):
-        if text == "/new_task":
-            task, answer = tasks.get_task()
-            _stored_chats[chat_id] = answer
-            return task
-    elif chat_id in _stored_chats:
-        return check_answer(chat_id, text)
-    return config.TEXT_NO_HANDLER
+    def handler(self, сhat_id_, text):
+        self._chat_id = str(сhat_id_)
+        if text.lstrip().startswith("/"):
+            if text == "/new_task":
+                task, answer = tasks.get_task()
+                self._stored_chats[self._chat_id] = answer
+                return task
+        elif self._chat_id in self._stored_chats:
+            if text == self._stored_chats[self._chat_id]:
+                del self._stored_chats[self._chat_id]
+                return config.TEXT_CORRECT_ANSWER
+            else:
+                return config.TEXT_INCORRECT_ANSWER
+        return config.TEXT_NO_HANDLER
 
 
 def main():
-    init()
-    cmd = {"commands": [{"command": "new_task", "description": "Generates a new task."}]}
+    cmd = {
+        "commands": [{"command": "new_task", "description": "Generates a new task."}]
+    }
     telegram = Telegram(config.TOKEN, cmd)
+    bot = Bot(config.DATA_FILE)
     while True:
         try:
             chat_id, message = telegram.get_message()
-            output = handler(chat_id, message)
+            output = bot.handler(chat_id, message)
             telegram.send_message(chat_id, output)
         except TimeoutError:
             continue
@@ -61,7 +55,7 @@ def main():
             logging.error(f"Exception occured\n{e}")
             continue
         except KeyboardInterrupt:
-            save()
+            bot.save()
             exit()
 
 
